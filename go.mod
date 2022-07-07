@@ -1,5 +1,5 @@
 module spikeSystem
 
-go 1.12
+go 1.18
 
-require github.com/garyburd/redigo v1.6.0
+require github.com/garyburd/redigo v1.6.3

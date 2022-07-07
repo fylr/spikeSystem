@@ -2,7 +2,6 @@ package util
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -30,7 +29,7 @@ func Resp(writer http.ResponseWriter, code int, msg string, data interface{}) {
 	//将结构体转化为json字符串
 	ret, err := json.Marshal(rep)
 	if err != nil {
-		log.Panicln(err.Error())
+		panic(err.Error())
 	}
 
 	//返回json ok

@@ -104,10 +104,10 @@ venv.bak/
 .mypy_cache/
 
 # log file
-./stat_[0-9].log
+stat_300[1-4].log
 
 # compile objects
-./spikeSystem_[0-9]
+spikeSystem_300[1-4]
 
 # go.sum
-./go.sum
+go.sum

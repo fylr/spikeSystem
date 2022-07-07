@@ -2,4 +2,4 @@ module spikeSystem
 
 go 1.18
 
-require github.com/garyburd/redigo v1.6.3
+require github.com/gomodule/redigo v1.8.9

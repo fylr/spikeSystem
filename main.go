@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"runtime"
 	"spikeSystem/localSpike"
 	"spikeSystem/remoteSpike"
 	"spikeSystem/util"
@@ -31,7 +32,7 @@ func init() {
 		QuantityOfOrderKey: "ticket_sold_nums",
 	}
 	redisPool = remoteSpike.NewPool()
-	done = make(chan int, 1)
+	done = make(chan int, runtime.NumCPU())
 	done <- 1
 }
 
@@ -51,14 +52,21 @@ func main() {
 //处理请求函数,根据请求将响应结果信息写入日志
 func handleReq(w http.ResponseWriter, r *http.Request) {
 	redisConn := redisPool.Get()
+	success_flag := false
+	//全局读写锁
+	<-done
+	if lSpike.LocalDeductionStock() && rSpike.RemoteDeductionStock(redisConn) {
+		success_flag = true
+	}
+	done <- 1
+	//将抢票状态写入到log中
 	LogMsg := ""
-	if lSpike.LocalDeductionStock(done) && rSpike.RemoteDeductionStock(redisConn) {
+	if success_flag {
 		util.RespJson(w, 1, "抢票成功", nil)
 		LogMsg += "result:1, localSales:" + strconv.FormatInt(lSpike.LocalSalesVolume, 10) + "\n"
 	} else {
 		util.RespJson(w, -1, "已售罄", nil)
 		LogMsg += "result:0, localSales:" + strconv.FormatInt(lSpike.LocalSalesVolume, 10) + "\n"
 	}
-	//将抢票状态写入到log中
 	logFile.WriteString(LogMsg)
 }

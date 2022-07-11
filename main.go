@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"os"
-	"runtime"
 	"spikeSystem/localSpike"
 	"spikeSystem/remoteSpike"
 	"spikeSystem/util"
@@ -32,7 +31,7 @@ func init() {
 		QuantityOfOrderKey: "ticket_sold_nums",
 	}
 	redisPool = remoteSpike.NewPool()
-	done = make(chan int, runtime.NumCPU())
+	done = make(chan int, 1)
 	done <- 1
 }
 

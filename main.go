@@ -64,7 +64,7 @@ func handleReq(w http.ResponseWriter, r *http.Request) {
 		util.RespJson(w, 1, "抢票成功", nil)
 		LogMsg += "result:1, localSales:" + strconv.FormatInt(lSpike.LocalSalesVolume, 10) + "\n"
 	} else {
-		util.RespJson(w, -1, "已售罄", nil)
+		util.RespJson(w, 2, "票已售罄", nil)
 		LogMsg += "result:0, localSales:" + strconv.FormatInt(lSpike.LocalSalesVolume, 10) + "\n"
 	}
 	logFile.WriteString(LogMsg)
